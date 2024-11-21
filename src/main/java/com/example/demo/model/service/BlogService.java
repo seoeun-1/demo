@@ -1,14 +1,14 @@
 package com.example.demo.model.service;
- import java.util.List;
- import java.util.Optional;
- import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
- import com.example.demo.model.domain.Article;
+import com.example.demo.model.domain.Article;
 import com.example.demo.model.domain.Board;
 import com.example.demo.model.repository.BlogRepository;
- import lombok.RequiredArgsConstructor;
+import lombok.RequiredArgsConstructor;
  @Service
 
  @RequiredArgsConstructor // 생성자자동생성(부분)
