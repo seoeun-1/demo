@@ -18,6 +18,8 @@ import com.example.demo.model.domain.Article;
 import com.example.demo.model.domain.Board;
 import com.example.demo.model.service.AddArticleRequest;
 import com.example.demo.model.service.BlogService;
+
+import jakarta.servlet.http.HttpSession;
  // 최상단 서비스 클래스 연동 추가
 @Controller
 
@@ -34,18 +36,30 @@ public class BlogController {
 
 
 @GetMapping("/board_list") // 새로운 게시판 링크 지정
-public String board_list(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "") String keyword) {
+public String board_list(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "") String keyword,  HttpSession session) {  // 세션 객체 전달
+
+String userId = (String) session.getAttribute("userId"); // 세션 아이디 존재 확인
+String email = (String) session.getAttribute("email"); // 세션에서 이메일 확인
+
+if (userId == null) {
+  return "redirect:/member_login"; // 로그인 페이지로 리다이렉션
+ }
+System.out.println("세션 userId: " + userId); // 서버 IDE 터미널에 세션 값 출력
+
 PageRequest pageable = PageRequest.of(page, 3); // 한 페이지의 게시글 수
 Page<Board> list; // Page를 반환
+
 if (keyword.isEmpty()) {
  list = blogService.findAll(pageable); // 기본 전체 출력(키워드 x)
  } else {
  list = blogService.searchByKeyword(keyword, pageable); // 키워드로 검색
 }
+
 model.addAttribute("boards", list); // 모델에 추가
 model.addAttribute("totalPages", list.getTotalPages()); // 페이지 크기
 model.addAttribute("currentPage", page); // 페이지 번호
 model.addAttribute("keyword", keyword); // 키워드
+model.addAttribute("email", email); // 로그인 사용자(이메일)
 return "board_list"; // .HTML 연결
 }
  
